@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Recuperar contraseña{% endblock %}
+{% block contenido %}
+<form method="post" class="form-checkout">
+    <h2>Recuperar contraseña</h2>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <div class="campo"><label>Email</label><input type="email" name="email" required></div>
+    <div class="campo"><label>Nueva contraseña</label><input type="password" name="password" required></div>
+    <button type="submit" class="btn btn-primario">Actualizar</button>
+</form>
+{% endblock %}

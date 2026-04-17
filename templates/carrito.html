@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Carrito - MiTienda{% endblock %}
+{% block contenido %}
+<h1 class="titulo-seccion">Tu carrito</h1>
+{% if items %}
+<table class="tabla-carrito">
+    <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item["nombre"] }}</td>
+        <td>{{ item["cantidad"] }}</td>
+        <td>${{ "%.2f"|format(item["precio"]) }}</td>
+        <td>${{ "%.2f"|format(item["subtotal"]) }}</td>
+        <td><a href="{{ url_for('quitar_del_carrito', id=item['id']) }}" class="btn btn-peligro">Quitar</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<p class="total-carrito">Total: ${{ "%.2f"|format(total) }}</p>
+<div class="acciones-carrito">
+    <a href="{{ url_for('vaciar_carrito') }}" class="btn btn-secundario">Vaciar carrito</a>
+    <a href="{{ url_for('checkout') }}" class="btn btn-primario">Finalizar compra</a>
+</div>
+{% else %}
+<p class="vacio">Tu carrito está vacío 🛒</p>
+{% endif %}
+{% endblock %}

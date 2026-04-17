@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Registro{% endblock %}
+{% block contenido %}
+<form method="post" class="form-checkout">
+    <h2>Registrarse</h2>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <div class="campo"><label>Nombre</label><input type="text" name="nombre" required></div>
+    <div class="campo"><label>Email</label><input type="email" name="email" required></div>
+    <div class="campo"><label>Contraseña</label><input type="password" name="password" required></div>
+    <button type="submit" class="btn btn-primario">Crear cuenta</button>
+</form>
+{% endblock %}

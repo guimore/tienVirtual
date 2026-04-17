@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio — MiTienda{% endblock %}
+
+{% block contenido %}
+
+<h1 class="titulo-seccion">Nuestros productos</h1>
+
+{% if productos %}
+<div class="grilla-productos">
+    {% for p in productos %}
+    <div class="card-producto">
+        <div class="card-imagen">
+            {% if p['imagen'] %}
+                <img src="{{ url_for('static', filename='img/' + p['imagen']) }}"
+                     alt="{{ p['nombre'] }}"
+                     onerror="this.style.display='none'">
+            {% else %}
+                <div class="placeholder-img">📦</div>
+            {% endif %}
+        </div>
+        <div class="card-info">
+            <h2 class="nombre">{{ p['nombre'] }}</h2>
+            <p class="descripcion">{{ p['descripcion'] }}</p>
+            <p class="precio">${{ "%.2f"|format(p['precio']) }}</p>
+            <div class="card-acciones">
+                <a href="{{ url_for('producto', id=p['id']) }}" class="btn btn-ver">Ver detalle</a>
+                <form action="{{ url_for('agregar_al_carrito', id=p['id']) }}" method="POST" class="form-agregar">
+                    <input type="hidden" name="cantidad" value="1">
+                    <button type="submit" class="btn btn-agregar">+ Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p class="vacio">No hay productos disponibles por el momento.</p>
+{% endif %}
+
+{% endblock %}

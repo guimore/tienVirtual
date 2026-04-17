@@ -1,0 +1,60 @@
+tienda-virtual/
+│
+├── app.py                  ← servidor Flask, rutas principales
+│
+├── database.db             ← base de datos SQLite (se crea sola)
+│
+├── models/
+│   └── db.py               ← conexión y tablas (productos, pedidos)
+│
+├── templates/
+│   ├── base.html           ← plantilla base (header, footer, nav)
+│   ├── index.html          ← catálogo / home
+│   ├── producto.html       ← detalle de un producto
+│   ├── carrito.html        ← carrito de compras
+│   └── checkout.html       ← formulario de compra
+│
+├── static/
+│   ├── css/
+│   │   └── style.css       ← estilos globales
+│   ├── img/
+│   │   └── (fotos de productos)
+│   └── js/
+│       └── carrito.js      ← lógica del carrito en el frontend
+│
+├── requirements.txt        ← dependencias (flask, etc.)
+└── README.md               ← instrucciones del proyecto
+
+#############################################################
+modificacion se agregaron funciones 16-04-2026 17.33 hs
+tienda-virtual/
+│
+├── app.py                  ← servidor Flask, rutas principales (productos, carrito, checkout, usuarios)
+│
+├── database.db             ← base de datos SQLite (productos, pedidos, usuarios)
+│
+├── models/
+│   └── db.py               ← conexión y definición de tablas
+│
+├── templates/
+│   ├── base.html           ← plantilla base (header, footer, nav)
+│   ├── index.html          ← catálogo / home
+│   ├── producto.html       ← detalle de un producto
+│   ├── carrito.html        ← carrito de compras
+│   ├── checkout.html       ← formulario de compra
+│   ├── registro.html       ← formulario de registro de usuario
+│   ├── login.html          ← formulario de inicio de sesión
+│   └── recuperar.html      ← formulario de recuperación de contraseña
+│
+├── static/
+│   ├── css/
+│   │   └── style.css       ← estilos globales
+│   ├── img/
+│   │   ├── remera.jpg      ← foto producto
+│   │   ├── pantalon.jpg    ← foto producto
+│   │   └── zapatillas.jpg  ← foto producto
+│   └── js/
+│       └── carrito.js      ← lógica del carrito en el frontend
+│
+├── requirements.txt        ← dependencias (flask, werkzeug, etc.)
+└── README.md               ← instrucciones del proyecto

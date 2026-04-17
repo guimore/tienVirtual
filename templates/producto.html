@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ producto["nombre"] }} - MiTienda{% endblock %}
+{% block contenido %}
+<div class="detalle-producto">
+    <div class="detalle-imagen">
+        {% if producto["imagen"] %}
+            <img src="{{ url_for('static', filename='img/' ~ producto['imagen']) }}" alt="{{ producto['nombre'] }}">
+        {% else %}
+            🛍️
+        {% endif %}
+    </div>
+    <div class="detalle-info">
+        <h1>{{ producto["nombre"] }}</h1>
+        <p class="descripcion">{{ producto["descripcion"] }}</p>
+        <p class="detalle-precio">${{ "%.2f"|format(producto["precio"]) }}</p>
+        <p class="detalle-stock">Stock disponible: {{ producto["stock"] }}</p>
+        <form action="{{ url_for('agregar_al_carrito', id=producto['id']) }}" method="post" class="form-cantidad">
+            <input type="number" name="cantidad" value="1" min="1">
+            <button type="submit" class="btn btn-agregar">Agregar al carrito</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

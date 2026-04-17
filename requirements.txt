@@ -1,0 +1,6 @@
+flask-mail      # para enviar correos (ej. recuperación de contraseña)
+bcrypt          # alternativa más robusta para hashing de contraseñas
+python-dotenv   # para manejar variables de entorno (ej. clave secreta)
+flask
+werkzeug
+twilio
