@@ -4,3 +4,4 @@ python-dotenv   # para manejar variables de entorno (ej. clave secreta)
 flask
 werkzeug
 twilio
+gunicorn
