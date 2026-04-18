@@ -283,8 +283,12 @@ def login():
     return render_template("login.html")
 
 # ──────────────────────────────────────────────
-# BLOQUE DE ARRANQUE
+# BLOQUE DE ARRANQUE (MODO PRO)
 # ──────────────────────────────────────────────
+
+# Esto se ejecuta SIEMPRE que arranca el proceso, incluso con Gunicorn
+init_db() 
+
 if __name__ == "__main__":
-    init_db()  # inicializa la base de datos si no existe
+    # Esto solo se ejecuta cuando corrés 'python app.py' en tu PC
     app.run(debug=True)

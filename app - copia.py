@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+import smtplib
+from email.mime.text import MIMEText
+from twilio.rest import Client
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_cambiame"  # cambiá esto en producción
@@ -12,13 +15,11 @@ DB = "database.db"
 # ──────────────────────────────────────────────
 
 def get_db():
-    """Devuelve una conexión a la base de datos."""
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    """Crea las tablas si no existen y carga productos de ejemplo."""
     conn = get_db()
     cursor = conn.cursor()
 
@@ -78,6 +79,33 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+# ──────────────────────────────────────────────
+# NOTIFICACIONES (EMAIL + WHATSAPP)
+# ──────────────────────────────────────────────
+
+def enviar_email(destinatario, asunto, mensaje):
+    remitente = "tuemail@gmail.com"
+    password = "tu_password_app"  # contraseña de aplicación
+    msg = MIMEText(mensaje, "plain", "utf-8")
+    msg["Subject"] = asunto
+    msg["From"] = remitente
+    msg["To"] = destinatario
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(remitente, password)
+        server.sendmail(remitente, [destinatario], msg.as_string())
+
+def enviar_whatsapp(destinatario, mensaje):
+    account_sid = "TU_ACCOUNT_SID"
+    auth_token = "TU_AUTH_TOKEN"
+    client = Client(account_sid, auth_token)
+
+    client.messages.create(
+        from_="whatsapp:+14155238886",  # número de Twilio
+        body=mensaje,
+        to=f"whatsapp:{destinatario}"   # ej: whatsapp:+54911XXXXXXXX
+    )
 
 # ──────────────────────────────────────────────
 # HELPERS DEL CARRITO
@@ -206,6 +234,13 @@ def checkout():
         conn.commit()
         conn.close()
         session.pop("carrito", None)
+
+        # ── Notificaciones ──
+        mensaje = f"Hola {nombre}, gracias por tu compra.\nTu pedido #{pedido_id} fue confirmado por ${total:.2f}."
+        enviar_email(email, "Confirmación de compra - MiTienda", mensaje)
+        # Cambiá el número por el del cliente
+        enviar_whatsapp("+54911XXXXXXXX", mensaje)
+
         return render_template("checkout.html", confirmado=True, nombre=nombre, pedido_id=pedido_id)
 
     return render_template("checkout.html", total=total_carrito())
@@ -246,28 +281,6 @@ def login():
         else:
             return render_template("login.html", error="Email o contraseña incorrectos.")
     return render_template("login.html")
-
-@app.route("/logout")
-def logout():
-    session.pop("usuario", None)
-    return redirect(url_for("index"))
-
-@app.route("/recuperar", methods=["GET", "POST"])
-def recuperar():
-    if request.method == "POST":
-        email = request.form["email"]
-        nueva = request.form["password"]
-        conn = get_db()
-        user = conn.execute("SELECT * FROM usuarios WHERE email = ?", (email,)).fetchone()
-        if user:
-            conn.execute("UPDATE usuarios SET password = ? WHERE email = ?",
-                         (generate_password_hash(nueva), email))
-            conn.commit()
-            conn.close()
-            return redirect(url_for("login"))
-        conn.close()
-        return render_template("recuperar.html", error="Email no encontrado.")
-    return render_template("recuperar.html")
 
 # ──────────────────────────────────────────────
 # BLOQUE DE ARRANQUE
