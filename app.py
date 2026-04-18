@@ -4,9 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import smtplib
 from email.mime.text import MIMEText
 from twilio.rest import Client
+import os
 
 app = Flask(__name__)
-app.secret_key = "clave_secreta_cambiame"  # cambiá esto en producción
+app.secret_key = os.environ.get("SECRET_KEY", "clave_secreta_cambiame")
 
 DB = "database.db"
 
@@ -20,65 +21,76 @@ def get_db():
     return conn
 
 def init_db():
-    conn = get_db()
-    cursor = conn.cursor()
+    print("Iniciando verificación de base de datos...")
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS productos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            descripcion TEXT,
-            precio REAL NOT NULL,
-            imagen TEXT,
-            stock INTEGER DEFAULT 0
-        )
-    """)
+        # Tabla de Productos
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS productos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                descripcion TEXT,
+                precio REAL NOT NULL,
+                imagen TEXT,
+                stock INTEGER DEFAULT 0
+            )
+        """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS pedidos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre_cliente TEXT NOT NULL,
-            email TEXT NOT NULL,
-            total REAL NOT NULL,
-            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
+        # Tabla de Pedidos
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS pedidos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre_cliente TEXT NOT NULL,
+                email TEXT NOT NULL,
+                total REAL NOT NULL,
+                fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS pedido_items (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pedido_id INTEGER,
-            producto_id INTEGER,
-            cantidad INTEGER,
-            precio_unitario REAL,
-            FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
-            FOREIGN KEY (producto_id) REFERENCES productos(id)
-        )
-    """)
+        # Tabla de Items de Pedido
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS pedido_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pedido_id INTEGER,
+                producto_id INTEGER,
+                cantidad INTEGER,
+                precio_unitario REAL,
+                FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+                FOREIGN KEY (producto_id) REFERENCES productos(id)
+            )
+        """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    """)
+        # Tabla de Usuarios
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL
+            )
+        """)
 
-    cursor.execute("SELECT COUNT(*) FROM productos")
-    if cursor.fetchone()[0] == 0:
-        productos_ejemplo = [
-            ("Remera básica", "100% algodón, varios colores", 4500.00, "remera.jpg", 10),
-            ("Pantalón cargo", "Con bolsillos laterales", 8900.00, "pantalon.jpg", 5),
-            ("Zapatillas urbanas", "Suela de goma reforzada", 15000.00, "zapatillas.jpg", 8),
-        ]
-        cursor.executemany(
-            "INSERT INTO productos (nombre, descripcion, precio, imagen, stock) VALUES (?, ?, ?, ?, ?)",
-            productos_ejemplo
-        )
+        # Insertar productos de ejemplo si la tabla está vacía
+        cursor.execute("SELECT COUNT(*) FROM productos")
+        if cursor.fetchone()[0] == 0:
+            productos_ejemplo = [
+                ("Remera básica", "100% algodón, varios colores", 4500.00, "remera.jpg", 10),
+                ("Pantalón cargo", "Con bolsillos laterales", 8900.00, "pantalon.jpg", 5),
+                ("Zapatillas urbanas", "Suela de goma reforzada", 15000.00, "zapatillas.jpg", 8),
+            ]
+            cursor.executemany(
+                "INSERT INTO productos (nombre, descripcion, precio, imagen, stock) VALUES (?, ?, ?, ?, ?)",
+                productos_ejemplo
+            )
+            print("Productos de ejemplo insertados.")
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        print("Base de datos y tablas verificadas correctamente.")
+    except Exception as e:
+        print(f"ERROR al inicializar la base de datos: {e}")
 
 # ──────────────────────────────────────────────
 # NOTIFICACIONES (EMAIL + WHATSAPP)
@@ -86,26 +98,31 @@ def init_db():
 
 def enviar_email(destinatario, asunto, mensaje):
     remitente = "tuemail@gmail.com"
-    password = "tu_password_app"  # contraseña de aplicación
+    password = "tu_password_app"  
     msg = MIMEText(mensaje, "plain", "utf-8")
     msg["Subject"] = asunto
     msg["From"] = remitente
     msg["To"] = destinatario
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(remitente, password)
-        server.sendmail(remitente, [destinatario], msg.as_string())
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(remitente, password)
+            server.sendmail(remitente, [destinatario], msg.as_string())
+    except Exception as e:
+        print(f"Error enviando email: {e}")
 
 def enviar_whatsapp(destinatario, mensaje):
     account_sid = "TU_ACCOUNT_SID"
     auth_token = "TU_AUTH_TOKEN"
-    client = Client(account_sid, auth_token)
-
-    client.messages.create(
-        from_="whatsapp:+14155238886",  # número de Twilio
-        body=mensaje,
-        to=f"whatsapp:{destinatario}"   # ej: whatsapp:+54911XXXXXXXX
-    )
+    try:
+        client = Client(account_sid, auth_token)
+        client.messages.create(
+            from_="whatsapp:+14155238886",
+            body=mensaje,
+            to=f"whatsapp:{destinatario}"
+        )
+    except Exception as e:
+        print(f"Error enviando WhatsApp: {e}")
 
 # ──────────────────────────────────────────────
 # HELPERS DEL CARRITO
@@ -235,12 +252,9 @@ def checkout():
         conn.close()
         session.pop("carrito", None)
 
-        # ── Notificaciones ──
         mensaje = f"Hola {nombre}, gracias por tu compra.\nTu pedido #{pedido_id} fue confirmado por ${total:.2f}."
         enviar_email(email, "Confirmación de compra - MiTienda", mensaje)
-        # Cambiá el número por el del cliente
-        enviar_whatsapp("+54911XXXXXXXX", mensaje)
-
+        
         return render_template("checkout.html", confirmado=True, nombre=nombre, pedido_id=pedido_id)
 
     return render_template("checkout.html", total=total_carrito())
@@ -286,9 +300,8 @@ def login():
 # BLOQUE DE ARRANQUE (MODO PRO)
 # ──────────────────────────────────────────────
 
-# Esto se ejecuta SIEMPRE que arranca el proceso, incluso con Gunicorn
+# LLAMADA OBLIGATORIA FUERA DEL IF PARA RENDER
 init_db() 
 
 if __name__ == "__main__":
-    # Esto solo se ejecuta cuando corrés 'python app.py' en tu PC
     app.run(debug=True)
