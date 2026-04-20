@@ -322,3 +322,26 @@ a { text-decoration: none; color: inherit; }
     color: #2e7d32;
     margin-top: 1.5rem;
 }
+
+/* ── INDEX GRILLA ── */
+.catalogo {
+    margin-top: 2rem;
+}
+
+.catalogo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #1a1a1a;
+}
+
+.grilla-productos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* fuerza 3 columnas */
+    gap: 1.5rem;
+}
+
+
+
+

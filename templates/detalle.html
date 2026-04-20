@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle - {{ producto['nombre'] }}{% endblock %}
+
+{% block contenido %}
+<div class="detalle-producto">
+  <div class="detalle-imagen">
+    <img src="{{ url_for('static', filename='img/' ~ producto['imagen']) }}" alt="{{ producto['nombre'] }}">
+  </div>
+  <div class="detalle-info">
+    <h1>{{ producto['nombre'] }}</h1>
+    <p class="detalle-precio">${{ producto['precio'] }}</p>
+    <p class="detalle-descripcion">{{ producto['descripcion'] }}</p>
+    {% if producto['stock'] is defined %}
+      <p class="detalle-stock">Stock: {{ producto['stock'] }}</p>
+    {% endif %}
+    <div class="card-acciones">
+      <a href="/" class="btn btn-ver">Volver al catálogo</a>
+      <a href="/agregar/{{ producto['id'] }}" class="btn btn-agregar">+ Agregar al carrito</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
