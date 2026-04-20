@@ -340,10 +340,7 @@ bidy .grilla-productos {
   
 }
 
-/* Y por si las moscas, forzá a los hijos */
-body .grilla-productos > * {
-    width: 100% !important;
-}
+
 @media (max-width: 768px) {
   main .grilla-productos {
     grid-template-columns: repeat(2, 1fr) !important;
