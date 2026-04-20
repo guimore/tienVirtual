@@ -7,17 +7,17 @@
   <div class="grilla-productos">
     {% for producto in productos %}
       <div class="card">
-        <img src="{{ url_for('static', filename='img/' ~ producto.imagen) }}" alt="{{ producto.nombre }}">
+        <img src="{{ url_for('static', filename='img/' ~ producto['imagen']) }}" alt="{{ producto['nombre'] }}">
         <div class="card-body">
-          <h5 class="card-title">{{ producto.nombre }}</h5>
-          <p class="card-text">{{ producto.descripcion }}</p>
-          <p class="precio">${{ producto.precio }}</p>
+          <h5 class="card-title">{{ producto['nombre'] }}</h5>
+          <p class="card-text">{{ producto['descripcion'] }}</p>
+          <p class="precio">${{ producto['precio'] }}</p>
           <div class="card-acciones">
-		    <!-- Para ver detalle (tenés que crear esta ruta en app.py) -->
-			<a href="{{ url_for('detalle', id=producto['id']) }}" class="btn btn-primary">Ver detalle</a>
-            <!-- Para agregar al carrito (ya existe como agregar_al_carrito con POST) -->
+            <!-- Ver detalle -->
+            <a href="{{ url_for('detalle', id=producto['id']) }}" class="btn btn-primary">Ver detalle</a>
+            <!-- Agregar al carrito -->
             <form action="{{ url_for('agregar_al_carrito', id=producto['id']) }}" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-success">+ Agregar</button>
+              <button type="submit" class="btn btn-success">+ Agregar</button>
             </form>
           </div>
         </div>
