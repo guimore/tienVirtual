@@ -13,13 +13,11 @@
           <p class="card-text">{{ producto.descripcion }}</p>
           <p class="precio">${{ producto.precio }}</p>
           <div class="card-acciones">
-		  
 		    <!-- Para ver detalle (tenés que crear esta ruta en app.py) -->
-           <a href="{{ url_for('detalle', id=producto.id) }}" class="btn btn-primary">Ver detalle</a>
-
-           <!-- Para agregar al carrito (ya existe como agregar_al_carrito con POST) -->
-            <form action="{{ url_for('agregar_al_carrito', id=producto.id) }}" method="post" style="display:inline;">
-             <button type="submit" class="btn btn-success">+ Agregar</button>
+			<a href="{{ url_for('detalle', id=producto['id']) }}" class="btn btn-primary">Ver detalle</a>
+            <!-- Para agregar al carrito (ya existe como agregar_al_carrito con POST) -->
+            <form action="{{ url_for('agregar_al_carrito', id=producto['id']) }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-success">+ Agregar</button>
             </form>
           </div>
         </div>
