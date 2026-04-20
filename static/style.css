@@ -65,12 +65,8 @@ a { text-decoration: none; color: inherit; }
     color: #1a1a1a;
 }
 
-/* ── GRILLA DE PRODUCTOS ── */
-.grilla-productos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-}
+
+
 
 /* ── CARD PRODUCTO ── */
 .card-producto {
@@ -335,6 +331,7 @@ a { text-decoration: none; color: inherit; }
     text-align: center;
     color: #1a1a1a;
 }
+/* ── GRILLA DE PRODUCTOS ── */
 
 main .grilla-productos {
   display: grid !important;
