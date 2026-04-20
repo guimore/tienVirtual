@@ -336,10 +336,12 @@ a { text-decoration: none; color: inherit; }
 main .grilla-productos {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
-  gap: 20px;
+  /*gap: 20px;*/
   
 }
-
+.grilla-productos .card {
+  width: 100%;
+}
 
 @media (max-width: 768px) {
   main .grilla-productos {

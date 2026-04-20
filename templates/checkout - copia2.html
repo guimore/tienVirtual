@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Checkout - MiTienda{% endblock %}
+{% block contenido %}
+{% if confirmado %}
+<div class="confirmacion">
+    <h2>¡Gracias por tu compra, {{ nombre }}!</h2>
+    <p>Tu pedido #{{ pedido_id }} fue registrado correctamente.</p>
+</div>
+{% else %}
+<form method="post" class="form-checkout">
+    <h2>Finalizar compra</h2>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <div class="campo">
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" id="nombre">
+    </div>
+    <div class="campo">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+    </div>
+    <p class="total-carrito">Total: ${{ "%.2f"|format(total) }}</p>
+    <button type="submit" class="btn btn-primario">Confirmar pedido</button>
+</form>
+{% endif %}
+{% endblock %}
