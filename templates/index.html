@@ -6,17 +6,15 @@
   <h1 class="titulo-seccion">Nuestros productos</h1>
   <div class="grilla-productos">
     {% for producto in productos %}
-      <div class="card-producto">
-        <div class="card-imagen">
-          <img src="{{ url_for('static', filename='img/' ~ producto['imagen']) }}" alt="{{ producto['nombre'] }}">
-        </div>
-        <div class="card-info">
-          <h2>{{ producto['nombre'] }}</h2>
-          <p class="descripcion">{{ producto['descripcion'] }}</p>
-          <p class="precio">${{ producto['precio'] }}</p>
+      <div class="card">
+        <img src="{{ url_for('static', filename='img/' ~ producto.imagen) }}" alt="{{ producto.nombre }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+          <p class="card-text">{{ producto.descripcion }}</p>
+          <p class="precio">${{ producto.precio }}</p>
           <div class="card-acciones">
-			<a href="/producto/{{ producto['id'] }}" class="btn btn-ver">Ver detalle</a>
-            <a href="/agregar/{{ producto['id'] }}" class="btn btn-agregar">+ Agregar</a>
+            <a href="{{ url_for('detalle', id=producto.id) }}" class="btn btn-primary">Ver detalle</a>
+            <a href="{{ url_for('agregar', id=producto.id) }}" class="btn btn-success">+ Agregar</a>
           </div>
         </div>
       </div>
