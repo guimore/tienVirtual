@@ -15,8 +15,10 @@
       <p class="detalle-stock">Stock: {{ producto['stock'] }}</p>
     {% endif %}
     <div class="card-acciones">
-      <a href="/" class="btn btn-ver">Volver al catálogo</a>
-      <a href="/agregar/{{ producto['id'] }}" class="btn btn-agregar">+ Agregar al carrito</a>
+        <a href="/" class="btn btn-ver">Volver al catálogo</a>
+        <form action="{{ url_for('agregar_al_carrito', id=producto['id']) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-agregar">+ Agregar al carrito</button>
+        </form>
     </div>
   </div>
 </div>
