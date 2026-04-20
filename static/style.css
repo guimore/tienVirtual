@@ -339,9 +339,7 @@ main .grilla-productos {
   gap: 20px;
   
 }
-.grilla-productos .card {
-  width: 100%;
-}
+
 
 @media (max-width: 768px) {
   main .grilla-productos {
