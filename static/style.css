@@ -337,12 +337,16 @@ a { text-decoration: none; color: inherit; }
 }
 
 
+
+}
 .grilla-productos {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
-  gap: 20px; /* espacio entre las cards */
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px;
   margin-top: 20px;
 }
+
+
 @media (max-width: 768px) {
   .grilla-productos {
     grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
