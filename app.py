@@ -296,6 +296,12 @@ def login():
             return render_template("login.html", error="Email o contraseña incorrectos.")
     return render_template("login.html")
 
+
+
+
+
+
+
 # ──────────────────────────────────────────────
 # BLOQUE DE ARRANQUE (MODO PRO)
 # ──────────────────────────────────────────────

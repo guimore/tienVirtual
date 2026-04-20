@@ -14,8 +14,8 @@
           <p class="precio">${{ producto['precio'] }}</p>
           <div class="card-acciones">
             <!-- Ver detalle -->
-            <a href="{{ url_for('detalle', id=producto['id']) }}" class="btn btn-primary">Ver detalle</a>
-            <!-- Agregar al carrito -->
+			<a href="{{ url_for('producto', id=producto['id']) }}" class="btn btn-primary">Ver detalle</a>
+          <!-- Agregar al carrito -->
             <form action="{{ url_for('agregar_al_carrito', id=producto['id']) }}" method="post" style="display:inline;">
               <button type="submit" class="btn btn-success">+ Agregar</button>
             </form>
