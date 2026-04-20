@@ -4,7 +4,9 @@
 
 {% block contenido %}
   <h1 class="titulo-seccion">Nuestros productos</h1>
-  <div class="grilla-productos">
+
+  <div class="grilla-productos" style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
+
     {% for producto in productos %}
       <div class="card">
         <img src="{{ url_for('static', filename='img/' ~ producto['imagen']) }}" alt="{{ producto['nombre'] }}">
