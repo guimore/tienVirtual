@@ -339,7 +339,7 @@ a { text-decoration: none; color: inherit; }
 .grilla-productos {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* fuerza 3 columnas */
-    gap: 1.5rem;
+    gap: 20px;
 }
 
 
