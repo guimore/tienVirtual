@@ -338,8 +338,8 @@ a { text-decoration: none; color: inherit; }
 
 
 
-}
-.grilla-productos {
+
+main .grilla-productos {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
   gap: 20px;
