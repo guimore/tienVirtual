@@ -342,32 +342,45 @@ body .grilla-productos {
 }
 
 /* Opcional: para que todas las cards tengan la misma altura dentro de la grilla */
-body .grilla-productos .card {
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
+body .grilla-productos {
+    display: grid !important;
+    /* 3 columnas iguales, cada una ocupa 1/3 del total */
+    grid-template-columns: repeat(3, 1fr) !important; 
+    
+    /* LIMITAMOS EL ANCHO TOTAL */
+    width: 90%;           /* Ocupa casi toda la pantalla en el celu */
+    max-width: 1200px;    /* Pero en la PC no se estira más de esto */
+    margin: 0 auto;       /* Centra la grilla */
+    
+    gap: 2%;              /* El espacio entre cards también en porcentaje */
+}
+
+body .card {
+    width: 100%;          /* La card ocupa el 100% de su columna (su 1/3) */
+    padding: 5%;          /* Margen interno elástico */
+}
+
+body .card img {
+    width: 100%;          /* La imagen siempre llena la card */
+    height: auto;         /* Mantiene la proporción original */
+    max-height: 250px;    /* Para que no se haga infinita para abajo */
+    object-fit: cover;
 }
 
 
-
-
-
-
-
-
-
-
-
-
+* Esto mantenelo para que en el celu no explote */
 @media (max-width: 768px) {
   main .grilla-productos {
     grid-template-columns: repeat(2, 1fr) !important;
+    width: 95%; /* Para que tenga un poquito de aire a los costados */
+    gap: 10px;
   }
 }
 
 @media (max-width: 480px) {
   main .grilla-productos {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr !important; /* Una sola columna para que se vea grande y claro */
+    width: 90%;
   }
 }
 
