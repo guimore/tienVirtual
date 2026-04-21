@@ -335,10 +335,28 @@ a { text-decoration: none; color: inherit; }
 
 body .grilla-productos {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 20px;
-  
+  grid-template-columns: repeat(3, 1fr) !important; /* Define 3 columnas iguales */
+  grid-template-rows: repeat(3, 1fr) !important;    /* AGREGA ESTO: Define 3 filas iguales */
+  gap: 20px !important;                             /* Aseguramos el espacio entre elementos */
+  align-items: start;                               /* Alinea las cards al principio de cada celda */
 }
+
+/* Opcional: para que todas las cards tengan la misma altura dentro de la grilla */
+body .grilla-productos .card {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 @media (max-width: 768px) {
