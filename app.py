@@ -73,18 +73,30 @@ def init_db():
         """)
 
         # Insertar productos de ejemplo si la tabla está vacía
-        cursor.execute("SELECT COUNT(*) FROM productos")
-        if cursor.fetchone()[0] == 0:
-            productos_ejemplo = [
-                ("Remera básica", "100% algodón, varios colores", 4500.00, "remera.jpg", 10),
-                ("Pantalón cargo", "Con bolsillos laterales", 8900.00, "pantalon.jpg", 5),
-                ("Zapatillas urbanas", "Suela de goma reforzada", 15000.00, "zapatillas.jpg", 8),
-            ]
-            cursor.executemany(
-                "INSERT INTO productos (nombre, descripcion, precio, imagen, stock) VALUES (?, ?, ?, ?, ?)",
-                productos_ejemplo
-            )
-            print("Productos de ejemplo insertados.")
+        # 1. LIMPIEZA: Borramos los productos viejos para que no bloqueen la carga
+        cursor.execute("DELETE FROM productos")
+
+        # 2. CARGA: Metemos los 9 productos (3 filas x 3 columnas)
+        productos_ejemplo = [
+            ("Remera básica", "100% algodón", 4500.0, "remera.jpg", 10),
+            ("Pantalón cargo", "Con bolsillos", 8900.0, "pantalon.jpg", 5),
+            ("Zapatillas urbanas", "Suela reforzada", 15000.0, "zapatillas.jpg", 8),
+            ("Bici Estrella 1", "Rodado 29, aluminio", 450000.0, "bici1.jpg", 3),
+            ("Bici Estrella 2", "Rodado 26, urbana", 380000.0, "bici2.jpg", 5),
+            ("Casco Seguridad", "Certificado IRPC", 25000.0, "casco.jpg", 12),
+            ("Inflador Mano", "Doble válvula", 8500.0, "inflador.jpg", 20),
+            ("Luces LED Pack", "Delantera y trasera", 12000.0, "luces.jpg", 15),
+            ("Cadena Acero", "Anti-robo cementada", 18000.0, "cadena.jpg", 10)
+        ]
+        
+        cursor.executemany(
+            "INSERT INTO productos (nombre, descripcion, precio, imagen, stock) VALUES (?, ?, ?, ?, ?)",
+            productos_ejemplo
+        )
+        print("¡9 productos cargados exitosamente!")
+        
+        
+        
 
         conn.commit()
         conn.close()
