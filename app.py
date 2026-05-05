@@ -265,7 +265,7 @@ def checkout():
         session.pop("carrito", None)
 
         mensaje = f"Hola {nombre}, gracias por tu compra.\nTu pedido #{pedido_id} fue confirmado por ${total:.2f}."
-        enviar_email(email, "Confirmación de compra - MiTienda", mensaje)
+        #enviar_email(email, "Confirmación de compra - MiTienda", mensaje)
         
         return render_template("checkout.html", confirmado=True, nombre=nombre, pedido_id=pedido_id)
 
